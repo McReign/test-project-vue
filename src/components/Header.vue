@@ -2,8 +2,8 @@
   <div class="header">
     <span @click="goLogin" class="go-login-btn">Контроль расходов</span>
     <div class="profile">
-      <div class="username" v-if="showProfile">{{getUsername}}</div>
-      <div class="role" v-if="showProfile">{{getRole}}</div>
+      <div class="username" v-if="$store.getters['currentUserState/isExists']">{{$store.getters['currentUserState/getUsername']}}</div>
+      <div class="role" v-if="$store.getters['currentUserState/isExists']">{{$store.getters['currentUserState/getRole']}}</div>
     </div>
   </div>
 </template>
@@ -11,30 +11,10 @@
 <script>
 export default {
   name: 'Header',
-  data () {
-    return {
-
-    }
-  },
   methods: {
     goLogin: function () {
       this.$router.push('/')
       this.$store.commit('currentUserState/login', {user: ''})
-    }
-  },
-  computed: {
-    getUsername: function () {
-      if (this.showProfile) {
-        return this.$HotUtils.parseJwt(this.$store.state.currentUserState.token).name
-      }
-    },
-    getRole: function () {
-      if (this.showProfile) {
-        return this.$HotUtils.parseJwt(this.$store.state.currentUserState.token).role
-      }
-    },
-    showProfile: function () {
-      return !!this.$store.state.currentUserState.token
     }
   }
 }

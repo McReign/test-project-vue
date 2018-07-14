@@ -1,4 +1,3 @@
-/* eslint-disable */
 <template>
   <el-row>
     <el-col :span="6" class="budget">
@@ -23,11 +22,6 @@ import CardsList from './CardsList'
 
 export default {
   name: 'ManagePage',
-  data () {
-    return {
-
-    }
-  },
   components: {
     CardsList
   },

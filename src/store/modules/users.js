@@ -154,19 +154,14 @@ const usersState = {
       return state.usersData.filter(item => item.login === login)[0].items
     },
     getCardsByType: state => ({login, type}) => {
-      // console.log(state.usersData.filter(item => item.login === login))
       return state.usersData.filter(item => item.login === login)[0].items.filter(item => item.type === type)
     }
   },
   actions: {
-    login () {
 
-    }
   },
   mutations: {
-    login () {
 
-    }
   }
 }
 
