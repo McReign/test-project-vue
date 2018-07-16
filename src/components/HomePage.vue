@@ -5,12 +5,12 @@
         <div slot="header" class="card-header">
           <span class="title">Войдите в свой аккаунт</span>
         </div>
-        <el-form :model="form" ref="form" :rules="rules">
+        <el-form id="form" :model="form" ref="form" :rules="rules">
           <el-form-item label="Логин" prop="login">
             <el-input v-model="form.login" placeholder="Введите ваш логин"></el-input>
           </el-form-item>
           <el-row type="flex" justify="center" class="btns">
-            <el-button type="primary" @click.prevent="onSubmit('form')">Войти</el-button>
+            <el-button type="primary" @click.prevent="onHandleSubmit('form')">Войти</el-button>
             <el-button @click.prevent="onClear">Очистить</el-button>
           </el-row>
         </el-form>
@@ -35,11 +35,11 @@ export default {
     }
   },
   methods: {
-    onSubmit: function (formName) {
+    onHandleSubmit: function (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
           const currentUser = this.$store.getters['usersState/getUserByLogin'](this.form.login)[0]
-          this.$store.commit('currentUserState/login', {user: currentUser})
+          this.$store.dispatch('currentUserState/login', {user: currentUser})
           this.$router.push('/home')
           if (!currentUser) {
             this.$message.error('Данного пользователя не существует!')
@@ -53,6 +53,12 @@ export default {
     onClear: function () {
       this.form.login = ''
     }
+  },
+  mounted () {
+    document.getElementById('form').addEventListener('submit', (e) => {
+      e.preventDefault()
+      this.onHandleSubmit('form')
+    })
   }
 }
 </script>

@@ -11,8 +11,10 @@
     <el-col :span="12">
       <cards-list/>
     </el-col>
-    <el-col :span="6" class="add-btn">
-      <i class="el-icon-circle-plus-outline"></i>
+    <el-col :span="6">
+      <div @click="$router.push('/add')" class="add-btn">
+        <i class="el-icon-circle-plus-outline"></i>
+      </div>
     </el-col>
   </el-row>
 </template>
@@ -28,9 +30,7 @@ export default {
   computed: {
     getBudget: function () {
       let budget = 0
-      this.$store.getters['usersState/getCardsByLogin'](
-        this.$HotUtils.parseJwt(this.$store.state.currentUserState.token).login
-      ).map(item => {
+      this.$store.getters['currentUserState/getCurrentUserCards'].map(item => {
         if (item.type === 'costs') {
           budget = budget - item.money
         } else {
@@ -57,10 +57,9 @@ export default {
     align-items: center;
     margin-top: 38px;
     height: 220px;
-    width: calc(25% - 60px);
+    width: calc(100% - 60px);
     margin-left: 30px;
     border-radius: 20px;
-    border: 2px solid;
     font-size: 80px;
     color: #c0c4cc;
     transition: 0.5s;

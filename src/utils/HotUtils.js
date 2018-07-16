@@ -1,3 +1,5 @@
+import uuid from 'uuid'
+
 const HotUtils = {
   install: function (Vue, options) {
     Vue.prototype.$HotUtils = {
@@ -8,6 +10,9 @@ const HotUtils = {
       },
       checkRole: function (role) {
         return this.parseJwt(Vue.store.state.currentUserState).role === role
+      },
+      getRandomId: function () {
+        return uuid.v4()
       }
     }
   }

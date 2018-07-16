@@ -38,9 +38,7 @@ export default {
   },
   methods: {
     getFilteredCards: function (type) {
-      return this.$store.getters['usersState/getCardsByType'](
-        {login: this.$HotUtils.parseJwt(this.$store.state.currentUserState.token).login, type: type}
-      )
+      return this.$store.getters['currentUserState/getCardsByType'](type).reverse()
     }
   }
 }

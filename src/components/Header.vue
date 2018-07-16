@@ -14,7 +14,7 @@ export default {
   methods: {
     goLogin: function () {
       this.$router.push('/')
-      this.$store.commit('currentUserState/login', {user: ''})
+      this.$store.dispatch('currentUserState/logout')
     }
   }
 }
