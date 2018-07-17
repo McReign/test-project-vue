@@ -38,12 +38,13 @@ export default {
     onHandleSubmit: function (formName) {
       this.$refs[formName].validate((valid) => {
         if (valid) {
-          const currentUser = this.$store.getters['usersState/getUserByLogin'](this.form.login)[0]
-          this.$store.dispatch('currentUserState/login', {user: currentUser})
-          this.$router.push('/home')
-          if (!currentUser) {
-            this.$message.error('Данного пользователя не существует!')
-          }
+          this.$store.dispatch('currentUserState/login', {login: this.form.login})
+            .then(() => this.$router.push('/home'))
+            .then(() => {
+              this.$store.dispatch('currentUserState/getCards', {login: this.$store.getters['currentUserState/getLogin']})
+                .catch(() => this.$message.error('Не удалось загрузить данные!'))
+            })
+            .catch(() => this.$message.error('Данного пользователя не существует!'))
         } else {
           console.log('error submit!!')
           return false

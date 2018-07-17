@@ -1,5 +1,6 @@
 import vue from '../../main'
-import usersData from '../usersData'
+// import usersData from '../../../server/data/usersData'
+import api from '../../services/Api'
 
 const currentUserState = {
   namespaced: true,
@@ -43,20 +44,38 @@ const currentUserState = {
   },
   actions: {
     login: function ({ commit, state, getters }, payload) {
-      commit('setUsername', payload)
-      commit('setCards', usersData.filter(item => item.login === getters.getLogin)[0].items)
+      return new Promise((resolve, reject) => {
+        api().post('/login', {
+          login: payload.login
+        })
+          .then((res) => {
+            commit('setUsername', res.data)
+            resolve()
+          })
+          .catch((error) => reject(error))
+      })
+    },
+    getCards: function ({ commit, state, getters }, payload) {
+      return new Promise((resolve, reject) => {
+        api().get(`/getCards?login=${payload.login}`)
+          .then(res => {
+            commit('setCards', res.data)
+            resolve()
+          })
+          .catch((error) => reject(error))
+      })
     },
     logout: function ({ commit, state }, payload) {
       commit('setUsername', '')
-      commit('setCards', [])
+      commit('setCards', {cards: []})
     }
   },
   mutations: {
     setUsername (state, payload) {
-      state.token = payload.user
+      state.token = payload.token
     },
     setCards (state, payload) {
-      state.cards = payload
+      state.cards = payload.cards
     },
     addCard (state, payload) {
       state.cards = state.cards.concat(payload)
