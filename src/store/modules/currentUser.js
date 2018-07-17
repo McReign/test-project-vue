@@ -6,8 +6,8 @@ const currentUserState = {
   namespaced: true,
   state: {
     token: '',
-    cards: []
-    // cards: usersData.filter(item => item.login === vue.$HotUtils.parseJwt(this.token))[0].items
+    cards: [],
+    loading: false
   },
   // element [0] is local state
   // element [1] is local getters
@@ -40,11 +40,15 @@ const currentUserState = {
     },
     getCardById: (...state) => id => {
       return state[1].getCurrentUserCards.filter(item => item.id === id)[0]
+    },
+    getLoading: (...state) => {
+      return state[0].loading
     }
   },
   actions: {
     login: function ({ commit, state, getters }, payload) {
       return new Promise((resolve, reject) => {
+        commit('setLoading', {data: true})
         api().post('/login', {
           login: payload.login
         })
@@ -52,30 +56,42 @@ const currentUserState = {
             commit('setUsername', res.data)
             resolve()
           })
-          .catch((error) => reject(error))
+          .catch((error) => {
+            reject(error)
+          })
+          .finally(() => commit('setLoading', {data: false}))
       })
     },
     getCards: function ({ commit, state, getters }, payload) {
       return new Promise((resolve, reject) => {
-        api().get(`/getCards?login=${payload.login}`)
-          .then(res => {
-            commit('setCards', res.data)
-            resolve()
-          })
-          .catch((error) => reject(error))
+        commit('setLoading', {data: true})
+        setTimeout(() => {
+          api().get(`/getCards?login=${payload.login}`)
+            .then(res => {
+              commit('setCards', res.data)
+              resolve()
+            })
+            .catch((error) => {
+              reject(error)
+            })
+            .finally(() => commit('setLoading', {data: false}))
+        }, 500)
       })
     },
     logout: function ({ commit, state }, payload) {
       commit('setUsername', '')
-      commit('setCards', {cards: []})
+      commit('setCards', {data: []})
     }
   },
   mutations: {
+    setLoading (state, payload) {
+      state.loading = payload.data
+    },
     setUsername (state, payload) {
-      state.token = payload.token
+      state.token = payload.data
     },
     setCards (state, payload) {
-      state.cards = payload.cards
+      state.cards = payload.data
     },
     addCard (state, payload) {
       state.cards = state.cards.concat(payload)

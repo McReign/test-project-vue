@@ -18,7 +18,6 @@ app.get('/getCards', function (req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader("Access-Control-Allow-Methods", "*");
   res.setHeader('Access-Control-Allow-Headers', 'origin, content-type, accept');
-  // console.log(req.query)
   usersManager.getUserCards(res, req.query.login)
 })
 

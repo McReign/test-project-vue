@@ -4,7 +4,7 @@ class UsersManager {
   loginUser (res, login) {
     let currentUser = data.users.filter(item => item.login === login)[0]
     if(currentUser) {
-      res.send({token: currentUser.token})
+      res.send({data: currentUser.token})
     }
     else {
       res.status(404).json({})
@@ -13,7 +13,7 @@ class UsersManager {
 
   getUserCards (res, login) {
     let currentUserCards = data.usersData.filter(item => item.login === login)[0].items
-    res.send({cards: currentUserCards})
+    res.send({data: currentUserCards})
   }
 }
 
