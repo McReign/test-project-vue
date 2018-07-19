@@ -57,6 +57,7 @@ const currentUserState = {
             resolve()
           })
           .catch((error) => {
+            console.log(error)
             reject(error)
           })
           .finally(() => commit('setLoading', {data: false}))

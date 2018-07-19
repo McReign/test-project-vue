@@ -1,7 +1,10 @@
 const express = require('express')
 const UsersManager = require('./models')
 const bodyParser = require('body-parser')
+const cors = require('cors')
 const app = express()
+
+app.use(cors())
 
 const usersManager = new UsersManager()
 
@@ -22,4 +25,19 @@ app.get('/getCards', function (req, res) {
 })
 
 console.log("Started at :9003");
-app.listen(9003)
+const server = app.listen(9003)
+
+const io = require('socket.io')(server)
+
+let messages = []
+
+io.on('connection', function (socket) {
+  if(messages.length > 0) {
+    messages.map(msg => io.emit("MESSAGE", msg))
+  }
+  socket.on('SEND_MESSAGE', function (data) {
+    messages.push(data)
+    messages = messages.slice(-100)
+    io.emit('MESSAGE', data)
+  })
+})

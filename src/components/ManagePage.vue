@@ -16,16 +16,19 @@
         <i class="el-icon-circle-plus-outline"></i>
       </div>
     </el-col>
+    <chat></chat>
   </el-row>
 </template>
 
 <script>
 import CardsList from './CardsList'
+import Chat from './Chat'
 
 export default {
   name: 'ManagePage',
   components: {
-    CardsList
+    CardsList,
+    Chat
   },
   computed: {
     getBudget: function () {
