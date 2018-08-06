@@ -29,6 +29,9 @@ const currentUserState = {
         return vue.$HotUtils.parseJwt(state.token).role
       }
     },
+    isAdmin: (state, getters) => {
+      return getters.getRole === 'admin'
+    },
     isExists: (state, getters) => {
       return !!state.token
     },

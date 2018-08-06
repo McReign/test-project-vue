@@ -6,13 +6,16 @@
         <span>{{ msg.user }}: </span>{{ msg.message }}
       </div>
     </div>
-    <div @keyup.enter="sendMessage">
+    <div v-if="$store.getters['currentUserState/isAdmin']" @keyup.enter="sendMessage">
       <el-input
         class="chat-input"
         placeholder="Введите сообщение..."
         v-model="input"
         ref="chatInput"
       />
+    </div>
+    <div v-else class="only-admin-text">
+      Сообщения могут отправлять только админы!
     </div>
   </div>
 </template>
@@ -35,6 +38,9 @@ export default {
     },
     scrollToBottom () {
       this.$refs.msgBox.scrollTop = this.$refs.msgBox.scrollHeight
+      // this.$refs.msgBox.scrollTop += 10
+      console.log('scrollTop', this.$refs.msgBox.scrollTop + 320)
+      console.log('scrollHeight', this.$refs.msgBox.scrollHeight)
     },
     sendMessage () {
       this.socket.emit('SEND_MESSAGE', {
@@ -64,6 +70,16 @@ export default {
 </script>
 
 <style scoped>
+.only-admin-text {
+  height: 40px;
+  font-size: 14px;
+  display: flex;
+  color: #ff100c;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid;
+}
+
 .chat-container {
   position: fixed;
   bottom: 6px;
@@ -74,6 +90,7 @@ export default {
   box-shadow: 0 2px 12px 0 rgba(0,0,0,.1);
   transition: 0.5s;
   transform: translateY(0);
+  overflow: hidden;
 }
 
 .chat-container__hidden {
@@ -95,6 +112,7 @@ export default {
   padding: 10px;
   box-sizing: border-box;
   overflow-y: auto;
+  margin-right: -16px;
 }
 
 .msg {
